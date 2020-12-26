@@ -68,9 +68,9 @@ void loop() {
 }
 
 void Calculate_Sun_Position(int hour, int minute, int second, int day, int month, int year) {
-  float T, JD_frac, L0, M, e, C, L_true, f, R, GrHrAngle, Obl, RA, Decl, HrAngle;
+  float T, JDate_frac, L0, M, e, C, L_true, f, R, GrHrAngle, Obl, RA, Decl, HrAngle;
   long JDate, JDx;
-  int zone = 0;
+  int   zone = 0;  //Unused variable but retained for continuity 
   JDate      = JulianDate(year, month, day);
   JDate_frac = (hour + minute / 60. + second / 3600.0) / 24.0 - 0.5;
   T          = JDate - 2451545; T = (T + JDate_frac) / 36525.0;
@@ -81,7 +81,7 @@ void Calculate_Sun_Position(int hour, int minute, int second, int day, int month
   f          = M + C;
   Obl        = DEG_TO_RAD * (23 + 26 / 60.0 + 21.448 / 3600. - 46.815 / 3600 * T);
   JDx        = JDate - 2451545;
-  GrHrAngle  = 280.46061837 + (360 * JDx) % 360 + 0.98564736629 * JDx + 360.98564736629 * JD_frac;
+  GrHrAngle  = 280.46061837 + (360 * JDx) % 360 + 0.98564736629 * JDx + 360.98564736629 * JDate_frac;
   GrHrAngle  = fmod(GrHrAngle, 360.0);
   L_true     = fmod(C + L0, 2 * PI);
   R          = 1.000001018 * (1 - e * e) / (1 + e * cos(f));
@@ -106,7 +106,7 @@ long JulianDate(int year, int month, int day) {
   JDate = (long)(365.25 * (year + 4716)) + (int)(30.6001 * (month + 1)) + day + B - 1524;
   return JDate;
 }
-
+ 
 ////////////// WiFi, Time and Date Functions /////////////////
 int StartWiFi(const char* ssid, const char* password) {
   int connAttempts = 0;
