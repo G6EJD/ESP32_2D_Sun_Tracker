@@ -1,6 +1,6 @@
-#include <WiFi.h>        // Built-in
-#include <ESP32Servo.h>  // https://github.com/madhephaestus/ESP32Servo
-#include <SolarCalculator.h>
+#include <WiFi.h>             // Built-in
+#include <ESP32Servo.h>       // Sketch/Include Library/Manage Libraries/Search for ESP32Servo by Kevin Harrington - Install
+#include <SolarCalculator.h>  // Sketch/Include Library/Manage Libraries/Search for SolarCalculator by jpb10 - Install
 #include <TimeLib.h>
 
 const char* ssid     = "yourSSID";
@@ -12,7 +12,8 @@ const char* password = "yourPASSWORD";
 double Lon = -88.99,
        Lat = 25.09,
        el,
-       az;
+       az,
+       sun_elevation;
 
 int    utc_offset;
 
@@ -36,6 +37,7 @@ void setup() {
 void loop() {
   time_t utc = now();
   calcHorizontalCoordinates(utc, Lat, Lon, az, el);
+  sun_elevation = el;
   Serial.println("Az: " + String(az) + "  El: " + String(el));
   Azi_servo.write(map(az, 90, 270, 180, 0));  // Align to azimuth
   if (sun_elevation < 0) sun_elevation = 0;   // Point at horizon if less than horizon
